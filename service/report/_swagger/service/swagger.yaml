@@ -1,0 +1,429 @@
+openapi: 3.0.3
+
+info:
+  version: "1.0"
+  title: "Report Management Service"
+  contact:
+    email: "ahmedmotair@gmail.com"
+    name: "Ahmed Motair"
+
+servers:
+  - url: http://localhost:9103/
+  - url: http://193.43.134.96:9103/
+
+tags:
+  - name: User Report
+  - name: Admin Report
+  - name: Lookup
+
+paths:
+  /posts/{postId}/reports:
+    post:
+      tags:
+        - User Report
+      summary: Create a report on a post
+      description: Create a new report for a specific post
+      operationId: "createReport"
+      parameters:
+        - name: postId
+          in: path
+          description: "The ID of the post being reported"
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReportRequestDTO'
+      responses:
+        '201':
+          description: Created
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /reports:
+    get:
+      tags:
+        - Admin Report
+      summary: Retrieve All Reports With Filters, Sorting & Pagination
+      operationId: getAllReportsByFilters
+      parameters:
+        - name: statusId
+          in: query
+          description: Report Status
+          required: false
+          schema:
+            type: integer
+            example: "2"
+        - name: categoryId
+          in: query
+          description: Report Category
+          required: false
+          schema:
+            type: integer
+            example: "1"
+        - name: createdOnFrom
+          in: query
+          description: Report Creation Date From
+          required: false
+          schema:
+            type: string
+            format: date
+            example: "2025-01-28"
+        - name: createdOnTo
+          in: query
+          description: Report Creation Date To
+          required: false
+          schema:
+            type: string
+            format: date
+            example: "2025-01-28"
+        - name: orderBy
+          in: query
+          description: Order Attribute
+          required: false
+          schema:
+            $ref: '#/components/schemas/OrderByAttributes'
+        - name: orderDir
+          in: query
+          description: Order Direction
+          required: false
+          schema:
+            $ref: '#/components/schemas/OrderDirections'
+        - name: pageOffset
+          in: query
+          description: Pagination Page Offset
+          required: false
+          schema:
+            type: integer
+            default: 0
+        - name: pageSize
+          in: query
+          description: Pagination Page Size
+          required: false
+          schema:
+            type: integer
+            default: 10
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LightReportResultSet'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /posts/reports/{reportId}:
+    get:
+      tags:
+        - Admin Report
+      summary: Get Report Details and Related Reports By Report Id
+      operationId: getReportsDetailsById
+      parameters:
+        - name: reportId
+          in: path
+          required: true
+          description: Report Id To Retrieve The Report
+          schema:
+            type: integer
+            format: int64
+            example: 1
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                schema:
+                $ref: '#/components/schemas/FullReportDetails'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /reports/{reportId}/actions/{action}:
+    put:
+      tags:
+        - Admin Report
+      summary: Approve or Reject a Report
+      operationId: performAction
+      parameters:
+        - name: reportId
+          in: path
+          required: true
+          description: The ID of the report to act on
+          schema:
+            type: integer
+            format: int64
+            example: 1
+        - name: action
+          in: path
+          required: true
+          description: The ID of the report to act on
+          schema:
+            $ref: '#/components/schemas/ReportActions'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                rejectReason:
+                  type: string
+                  description: The reason for rejecting the report (if applicable)
+                  example: "The report contains false information."
+      responses:
+        '204':
+          description: No Content
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /lookups/categories/report/post:
+    get:
+      tags:
+        - Lookup
+      summary: Retrieve All Report Categories
+      operationId: getAllCategories
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LookupResultSet'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /lookups/statuses/report/post:
+    get:
+      tags:
+        - Lookup
+      summary: Retrieve All Statuses Report
+      operationId: getAllStatus
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LookupResultSet'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+components:
+  responses:
+    BadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorVTO'
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorVTO'
+
+  schemas:
+    ReportRequestDTO:
+      type: object
+      required:
+        - categoryId
+      properties:
+        categoryId:
+          type: integer
+          example: 1
+          description: "The ID of the report category"
+        reason:
+          type: string
+          description: "reason about the report"
+          example: "The report contains false information."
+
+    ErrorVTO:
+      type: object
+      properties:
+        domain:
+          type: string
+        code:
+          type: string
+        message:
+          type: string
+        formErrors:
+          type: array
+          items:
+            $ref: '#/components/schemas/FormError'
+
+    FormError:
+      type: object
+      properties:
+        attrName:
+          type: string
+        code:
+          type: string
+
+    LookupVTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        titleEn:
+          type: string
+          example: "Spam"
+
+    LightUserVTO:
+      type: object
+      properties:
+        id:
+          type: integer
+        fullName:
+          type: string
+
+    LightReportResultSet:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/LightReportListItem'
+        total:
+          type: integer
+          format: int64
+          description: Total Number Of Reports
+
+    LightReportListItem:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        post:
+          $ref: '#/components/schemas/LightPostVTO'
+        createdBy:
+          $ref: '#/components/schemas/LightUserVTO'
+        category:
+          $ref: '#/components/schemas/LookupVTO'
+        status:
+          $ref: '#/components/schemas/LookupVTO'
+        createdOn:
+          type: string
+          format: date
+          example: "2025-01-27 15:43:25"
+        lastModifiedOn:
+          type: string
+          format: date
+          example: "2025-02-6 15:43:25"
+
+    LightPostVTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        title:
+          type: string
+
+    PostDetailsVTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        title:
+          type: string
+        createdBy:
+          $ref: '#/components/schemas/LightUserVTO'
+        createdOn:
+          type: string
+          format: date
+        content:
+          type: string
+
+    LookupResultSet:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/LookupVTO'
+
+    OrderByAttributes:
+      type: string
+      enum: [ REPORT_CATEGORY, REPORT_STATUS, CREATION_DATE ]
+      example: "REPORT_CATEGORY"
+
+    OrderDirections:
+      type: string
+      enum: [ ASC, DESC ]
+      default: "DESC"
+
+    FullReportDetails:
+      type: object
+      properties:
+        reportDetails:
+          $ref: '#/components/schemas/ReportDetails'
+        post:
+          $ref: '#/components/schemas/PostDetailsVTO'
+        relatedReports:
+          type: array
+          items:
+            $ref: '#/components/schemas/PostReportListItem'
+
+
+    PostReportListItem:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: ID of the related report.
+        category:
+          $ref: '#/components/schemas/LookupVTO'
+        status:
+          $ref: '#/components/schemas/LookupVTO'
+        createdBy:
+          $ref: '#/components/schemas/LightUserVTO'
+        createdOn:
+          type: string
+          format: date
+
+    ReportDetails:
+      type: object
+      properties:
+        category:
+          $ref: '#/components/schemas/LookupVTO'
+        reason:
+          type: string
+        status:
+          $ref: '#/components/schemas/LookupVTO'
+        createdBy:
+          $ref: '#/components/schemas/LightUserVTO'
+        createdOn:
+          type: string
+          format: date
+        lastModifiedBy:
+          $ref: '#/components/schemas/LightUserVTO'
+        lastModifiedOn:
+          type: string
+          format: date
+
+
+    ReportActions:
+      type: string
+      enum: [ APPROVE, REJECT ]
+      example: "APPROVE"

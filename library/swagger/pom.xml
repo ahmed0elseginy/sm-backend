@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>zag</groupId>
+        <artifactId>social-media</artifactId>
+        <version>0.0.1</version>
+        <relativePath>../../pom.xml</relativePath>
+    </parent>
+
+    <groupId>zag.library</groupId>
+    <artifactId>swagger</artifactId>
+    <version>0.0.1</version>
+
+    <properties>
+
+        <!--        <jakarta.validation-api.version>3.1.0</jakarta.validation-api.version>-->
+        <!--        <javax.validation-api.version>2.0.1.Final</javax.validation-api.version>-->
+        <!--        <javax.annotation-api.version>1.3.2</javax.annotation-api.version>-->
+        <!--        <io.swagger-annotations.version>1.6.14</io.swagger-annotations.version>-->
+        <io.swagger-annotations.v3.version>2.2.28</io.swagger-annotations.v3.version>
+        <openapitools.jackson-databind-nullable.version>0.2.6</openapitools.jackson-databind-nullable.version>
+
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>io.swagger.core.v3</groupId>
+            <artifactId>swagger-annotations</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openapitools</groupId>
+            <artifactId>jackson-databind-nullable</artifactId>
+        </dependency>
+    </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>zag.library</groupId>
+                <artifactId>lib-bom</artifactId>
+                <version>${zag.lib-bom.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>io.swagger.core.v3</groupId>
+                <artifactId>swagger-annotations</artifactId>
+                <version>${io.swagger-annotations.v3.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.openapitools</groupId>
+                <artifactId>jackson-databind-nullable</artifactId>
+                <version>${openapitools.jackson-databind-nullable.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+</project>

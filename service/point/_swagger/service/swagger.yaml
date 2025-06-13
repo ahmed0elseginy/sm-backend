@@ -1,0 +1,71 @@
+openapi: 3.0.3
+
+info:
+  version: "1.0"
+  title: "Point Management Service"
+  contact:
+    email: "ahmedmotair@gmail.com"
+    name: "Ahmed Motair"
+
+servers:
+  - url: http://localhost:9101/
+  - url: http://193.43.134.96:9101/
+
+tags:
+
+
+paths:
+
+components:
+  responses:
+    BadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorVTO'
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorVTO'
+
+  schemas:
+    ErrorVTO:
+      type: object
+      properties:
+        domain:
+          type: string
+        code:
+          type: string
+        message:
+          type: string
+        formErrors:
+          type: array
+          items:
+            $ref: '#/components/schemas/FormError'
+
+    FormError:
+      type: object
+      properties:
+        attrName:
+          type: string
+        code:
+          type: string
+
+    LookupVTO:
+      type: object
+      properties:
+        id:
+          type: integer
+        titleEn:
+          type: string
+
+    LightUserVTO:
+      type: object
+      properties:
+        id:
+          type: integer
+        fullName:
+          type: string

@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+    <changeSet id="1" author="ahmed.motair">
+        <createTable tableName="post">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="title" type="varchar(250)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="content" type="varchar(1000)">
+                <constraints nullable="false"/>
+        </column>
+            <column name="created_on" type="datetime" defaultValue="NOW()">
+            <constraints nullable="false"/>
+            </column>
+            <column name="created_by_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_modified_on" type="datetime" defaultValue="NOW()">
+                <constraints nullable="true"/>
+            </column>
+            <column name="status" type="tinyint(1)" defaultValue="0">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+ 
+    <changeSet id="2" author="ahmed.motair">
+        <createTable tableName="comment">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="post_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="content" type="varchar(1000)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_by_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_on" type="datetime" defaultValue="NOW()">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="3" author="ahmed.motair">
+        <addForeignKeyConstraint baseColumnNames="post_id" baseTableName="comment"
+                                 constraintName="fk_comment_post"
+                                 referencedColumnNames="id" referencedTableName="post"/>
+    </changeSet>
+
+    <changeSet id="4" author="ahmed.motair">
+        <createTable tableName="rate">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="post_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="post_rate" type="enum('1', '2','3','4','5')">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="created_on" type="datetime" defaultValue="NOW()">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_by_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="5" author="ahmed.motair">
+        <addForeignKeyConstraint baseColumnNames="post_id" baseTableName="rate"
+                                 constraintName="fk_rate_post"
+                                 referencedColumnNames="id" referencedTableName="post"/>
+    </changeSet>
+
+
+    <changeSet id="6" author="ahmed.motair">
+        <createTable tableName="comment_reaction">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="comment_id" type="int">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="created_on" type="datetime" defaultValue="NOW()">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_by_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="react" type="enum('LIKE','DISLIKE')">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="7" author="ahmed.motair">
+        <addForeignKeyConstraint baseColumnNames="comment_id" baseTableName="comment_reaction"
+                                 constraintName="fk_comment_reaction_comment"
+                                 referencedColumnNames="id" referencedTableName="comment"/>
+    </changeSet>
+
+
+    <changeSet id="8" author="ahmed.motair">
+        <insert tableName="post">
+            <column name="id" value="1"/>
+            <column name="title" value="egypt is best place"/>
+            <column name="content" value="we go to egypt last year with my familly i love it so much"/>
+            <column name="created_by_id" value="8"/>
+            <column name="status" value="0"/>
+        </insert>
+
+        <insert tableName="comment">
+            <column name="id" value="1"/>
+            <column name="post_id" value="1"/>
+            <column name="content" value="Nice post i understand it"/>
+            <column name="created_by_id" value="8"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="9" author="ahmed.motair">
+        <insert tableName="rate">
+            <column name="id" value="1"/>
+            <column name="post_id" value="1"/>
+            <column name="created_by_id" value="9"/>
+            <column name="post_rate" value="4"/>
+        </insert>
+
+        <insert tableName="comment_reaction">
+            <column name="id" value="1"/>
+            <column name="comment_id" value="1"/>
+            <column name="created_by_id" value="9"/>
+            <column name="react" value="LIKE"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>
+

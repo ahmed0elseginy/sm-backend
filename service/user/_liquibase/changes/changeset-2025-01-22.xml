@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="1" author="ahmed.motair">
+        <createTable tableName="user_status">
+            <column name="id" type="int">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="title_en" type="varchar(25)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="2" author="ahmed.motair">
+        <createTable tableName="role">
+            <column name="id" type="int">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="title_en" type="varchar(25)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="level" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="parent_role_id" type="int"/>
+            <column name="created_on" type="datetime" defaultValue="NOW()">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="3" author="ahmed.motair">
+        <addForeignKeyConstraint baseColumnNames="parent_role_id" baseTableName="role"
+                                 constraintName="fk_role_parent_role"
+                                 referencedColumnNames="id" referencedTableName="role"/>
+    </changeSet>
+
+    <changeSet id="4" author="ahmed.motair">
+        <createTable tableName="user">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="first_name" type="varchar(25)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_name" type="varchar(25)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="varchar(150)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="mobile_number" type="varchar(11)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password" type="varchar(150)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="gender" type="enum('M', 'F')">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_on" type="datetime" defaultValue="NOW()">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_by_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_modified_on" type="datetime"/>
+            <column name="last_modified_by_id" type="int"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="5" author="ahmed.motair">
+        <addForeignKeyConstraint baseColumnNames="created_by_id" baseTableName="user"
+                                 constraintName="fk_user_created_by"
+                                 referencedColumnNames="id" referencedTableName="user"/>
+    </changeSet>
+
+    <changeSet id="6" author="ahmed.motair">
+        <addForeignKeyConstraint baseColumnNames="last_modified_by_id" baseTableName="user"
+                                 constraintName="fk_user_last_modified_by"
+                                 referencedColumnNames="id" referencedTableName="user"/>
+    </changeSet>
+
+    <changeSet id="7" author="ahmed.motair">
+        <addForeignKeyConstraint baseColumnNames="status_id" baseTableName="user"
+                                 constraintName="fk_user_status"
+                                 referencedColumnNames="id" referencedTableName="user_status"/>
+    </changeSet>
+
+    <changeSet id="8" author="ahmed.motair">
+        <createTable tableName="user_role">
+            <column name="user_id" type="int">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="role_id" type="int">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="created_on" type="datetime" defaultValue="NOW()">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="9" author="ahmed.motair">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="user_role"
+                                 constraintName="fk_user_role_user"
+                                 referencedColumnNames="id" referencedTableName="user"/>
+    </changeSet>
+
+    <changeSet id="10" author="ahmed.motair">
+        <addForeignKeyConstraint baseColumnNames="role_id" baseTableName="user_role"
+                                 constraintName="fk_user_role_role"
+                                 referencedColumnNames="id" referencedTableName="role"/>
+    </changeSet>
+
+    <changeSet id="11" author="ahmed.motair">
+        <insert tableName="role">
+            <column name="id" value="1"/>
+            <column name="title_en" value="Admin"/>
+            <column name="level" value="0"/>
+        </insert>
+
+        <insert tableName="role">
+            <column name="id" value="2"/>
+            <column name="title_en" value="Member"/>
+            <column name="level" value="0"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="12" author="ahmed.motair">
+        <insert tableName="user_status">
+            <column name="id" value="1"/>
+            <column name="title_en" value="Pending"/>
+        </insert>
+
+        <insert tableName="user_status">
+            <column name="id" value="2"/>
+            <column name="title_en" value="Activated"/>
+        </insert>
+    </changeSet>
+
+
+
+</databaseChangeLog>

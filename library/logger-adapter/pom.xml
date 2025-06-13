@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>zag</groupId>
+		<artifactId>social-media</artifactId>
+		<version>0.0.1</version>
+		<relativePath>../../pom.xml</relativePath>
+	</parent>
+
+	<groupId>zag.library</groupId>
+	<artifactId>logger-adapter</artifactId>
+	<version>0.0.1</version>
+
+	<properties>
+		<!--		<io.github.openfeign.version>13.5</io.github.openfeign.version>-->
+		<!--		<reactiverse-contextual-logging.version>1.2.1</reactiverse-contextual-logging.version>-->
+		<!--		<io-micrometer-tracing-bom.version>1.2.3</io-micrometer-tracing-bom.version>-->
+		<!--		<io-micrometer-bom.version>1.12.3</io-micrometer-bom.version>-->
+		<!--		<io-micrometer.context-propagation.version>1.1.1</io-micrometer.context-propagation.version>-->
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+
+		<!--		<dependency>-->
+		<!--			<groupId>io.micrometer</groupId>-->
+		<!--			<artifactId>micrometer-tracing-bridge-otel</artifactId>-->
+		<!--		</dependency>-->
+
+		<!--		<dependency>-->
+		<!--			<groupId>io.micrometer</groupId>-->
+		<!--			<artifactId>micrometer-tracing-bridge-brave</artifactId>-->
+		<!--		</dependency>-->
+
+		<!--		<dependency>-->
+		<!--			<groupId>io.github.openfeign</groupId>-->
+		<!--			<artifactId>feign-micrometer</artifactId>-->
+		<!--		</dependency>-->
+
+		<!--		<dependency>-->
+		<!--			<groupId>io.micrometer</groupId>-->
+		<!--			<artifactId>micrometer-observation</artifactId>-->
+		<!--		</dependency>-->
+
+		<!--		<dependency>-->
+		<!--			<groupId>io.micrometer</groupId>-->
+		<!--			<artifactId>context-propagation</artifactId>-->
+		<!--		</dependency>-->
+
+		<!--		<dependency>-->
+		<!--			<groupId>io.micrometer</groupId>-->
+		<!--			<artifactId>micrometer-tracing</artifactId>-->
+		<!--		</dependency>-->
+
+		<!--		<dependency>-->
+		<!--			<groupId>io.projectreactor</groupId>-->
+		<!--			<artifactId>reactor-core</artifactId>-->
+		<!--			<scope>provided</scope>-->
+		<!--		</dependency>-->
+
+		<!--		<dependency>-->
+		<!--			<groupId>org.springframework.boot</groupId>-->
+		<!--			<artifactId>spring-boot-starter-log4j2</artifactId>-->
+		<!--			<scope>provided</scope>-->
+		<!--		</dependency>-->
+	</dependencies>
+
+	<!--	<dependencyManagement>-->
+	<!--		<dependencies>-->
+	<!--			<dependency>-->
+	<!--				<groupId>io.micrometer</groupId>-->
+	<!--				<artifactId>micrometer-tracing-bom</artifactId>-->
+	<!--				<version>${io-micrometer-tracing-bom.version}</version>-->
+	<!--				<type>pom</type>-->
+	<!--				<scope>import</scope>-->
+	<!--			</dependency>-->
+
+	<!--			<dependency>-->
+	<!--				<groupId>io.micrometer</groupId>-->
+	<!--				<artifactId>micrometer-bom</artifactId>-->
+	<!--				<version>${io-micrometer-bom.version}</version>-->
+	<!--				<type>pom</type>-->
+	<!--				<scope>import</scope>-->
+	<!--			</dependency>-->
+
+	<!--			<dependency>-->
+	<!--				<groupId>io.micrometer</groupId>-->
+	<!--				<artifactId>context-propagation</artifactId>-->
+	<!--				<version>${io-micrometer.context-propagation.version}</version>-->
+	<!--			</dependency>-->
+
+	<!--			<dependency>-->
+	<!--				<groupId>io.reactiverse</groupId>-->
+	<!--				<artifactId>reactiverse-contextual-logging</artifactId>-->
+	<!--				<version>${reactiverse-contextual-logging.version}</version>-->
+	<!--			</dependency>-->
+
+	<!--			<dependency>-->
+	<!--				<groupId>io.github.openfeign</groupId>-->
+	<!--				<artifactId>feign-bom</artifactId>-->
+	<!--				<version>${io.github.openfeign.version}</version>-->
+	<!--				<type>pom</type>-->
+	<!--				<scope>import</scope>-->
+	<!--			</dependency>-->
+	<!--		</dependencies>-->
+	<!--	</dependencyManagement>-->
+</project>

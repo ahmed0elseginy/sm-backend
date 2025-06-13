@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="1" author="ahmed.el-seginy">
+        <createTable tableName="domains">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="title_en" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="2" author="ahmed.el-seginy">
+        <createTable tableName="event">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="title_en" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_active" type="boolean" defaultValueBoolean="true">
+                <constraints nullable="false"/>
+            </column>
+            <column name="domain_id" type="int">
+                <constraints nullable="false" foreignKeyName="fk_event_domain" references="domains(id)"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="3" author="ahmed.el-seginy">
+        <createTable tableName="event_setting">
+            <column name="event_id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"
+                             foreignKeyName="fk_event_setting_event" references="event(id)"/>
+            </column>
+            <column name="positive_points" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="negative_points" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="4" author="ahmed.el-seginy">
+        <createTable tableName="user_points">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="user_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="event_id" type="int">
+                <constraints nullable="false" foreignKeyName="fk_user_points_event" references="event(id)"/>
+            </column>
+            <column name="points" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_on" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="5" author="ahmed.el-seginy">
+        <!-- Insert into domains -->
+        <insert tableName="domains">
+            <column name="title_en" value="Post"/> <!-- Post -->
+        </insert>
+        <insert tableName="domains">
+            <column name="title_en" value="Comment"/> <!-- Comment -->
+        </insert>
+        <insert tableName="domains">
+            <column name="title_en" value="User"/> <!-- User -->
+        </insert>
+        <insert tableName="domains">
+            <column name="title_en" value="Report"/> <!-- Report -->
+        </insert>
+
+        <!-- Insert into event -->
+        <!--        ============= Post Events  =============        -->
+        <insert tableName="event">
+            <column name="title_en" value="Create_Post"/> <!-- Create_Post -->
+            <column name="is_active" valueBoolean="true"/>
+            <column name="domain_id" value="1"/> <!-- Post -->
+        </insert>
+        <insert tableName="event">
+            <column name="title_en" value="Delete_Post"/> <!-- Delete_Post -->
+            <column name="is_active" valueBoolean="true"/>
+            <column name="domain_id" value="1"/> <!-- Post -->
+        </insert>
+        <insert tableName="event">
+            <column name="title_en" value="Report_Post"/> <!-- Report_Post -->
+            <column name="is_active" valueBoolean="true"/>
+            <column name="domain_id" value="1"/> <!-- Post -->
+        </insert>
+        <!--        ============= Comment Events  ===========       -->
+        <insert tableName="event">
+            <column name="title_en" value="Create_Comment"/> <!-- Create_Comment -->
+            <column name="is_active" valueBoolean="true"/>
+            <column name="domain_id" value="2"/> <!-- Comment -->
+        </insert>
+        <insert tableName="event">
+            <column name="title_en" value="Delete_Comment"/> <!-- Delete_Comment -->
+            <column name="is_active" valueBoolean="true"/>
+            <column name="domain_id" value="2"/> <!-- Comment -->
+        </insert>
+        <!--        ============= User Events  ===========          -->
+        <insert tableName="event">
+            <column name="title_en" value="Register_User"/> <!-- Register_User -->
+            <column name="is_active" valueBoolean="true"/>
+            <column name="domain_id" value="3"/> <!-- User -->
+        </insert>
+        <insert tableName="event">
+            <column name="title_en" value="Assign_Admin_Role"/> <!-- Assign_Admin_Role -->
+            <column name="is_active" valueBoolean="true"/>
+            <column name="domain_id" value="3"/> <!-- User -->
+        </insert>
+        <insert tableName="event">
+            <column name="title_en" value="Remove_Admin_Role"/> <!-- Remove_Admin_Role -->
+            <column name="is_active" valueBoolean="true"/>
+            <column name="domain_id" value="3"/> <!-- User -->
+        </insert>
+<!--        ============= Report Events  ===========        -->
+        <insert tableName="event">
+            <column name="title_en" value="Approve_Report"/> <!-- Approve_Report -->
+            <column name="is_active" valueBoolean="true"/>
+            <column name="domain_id" value="4"/> <!-- Report -->
+        </insert>
+        <insert tableName="event">
+            <column name="title_en" value="Reject_Report"/> <!-- Approve_Report -->
+            <column name="is_active" valueBoolean="true"/>
+            <column name="domain_id" value="4"/> <!-- Report -->
+        </insert>
+
+        <!-- Insert into event_setting -->
+        <!-- 1 --><insert tableName="event_setting">
+            <column name="event_id" value="1"/> <!-- Create_Post event -->
+            <column name="positive_points" value="12"/>
+            <column name="negative_points" value="0"/>
+        </insert>
+        <insert tableName="event_setting">
+            <column name="event_id" value="2"/> <!-- Delete_Post event -->
+            <column name="positive_points" value="0"/>
+            <column name="negative_points" value="-12"/>
+        </insert>
+        <insert tableName="event_setting">
+            <column name="event_id" value="3"/> <!-- Report_Post event -->
+            <column name="positive_points" value="5"/>
+            <column name="negative_points" value="-15"/>
+        </insert>
+        <insert tableName="event_setting">
+            <column name="event_id" value="4"/> <!-- Create_Comment event -->
+            <column name="positive_points" value="7"/>
+            <column name="negative_points" value="0"/>
+        </insert>
+        <insert tableName="event_setting">
+            <column name="event_id" value="5"/> <!-- Delete_Comment event -->
+            <column name="positive_points" value="0"/>
+            <column name="negative_points" value="-7"/>
+        </insert>
+        <insert tableName="event_setting">
+            <column name="event_id" value="6"/> <!-- Register_User event -->
+            <column name="positive_points" value="20"/>
+            <column name="negative_points" value="0"/>
+        </insert>
+        <insert tableName="event_setting">
+            <column name="event_id" value="7"/> <!-- Assign_Admin_Role event -->
+            <column name="positive_points" value="50"/>
+            <column name="negative_points" value="0"/>
+        </insert>
+        <insert tableName="event_setting">
+            <column name="event_id" value="8"/> <!-- Remove_Admin_Role event -->
+            <column name="positive_points" value="0"/>
+            <column name="negative_points" value="-50"/>
+        </insert>
+        <insert tableName="event_setting">
+            <column name="event_id" value="9"/> <!-- Approve_Report event -->
+            <column name="positive_points" value="8"/>
+            <column name="negative_points" value="-12"/>
+        </insert>
+        <insert tableName="event_setting">
+            <column name="event_id" value="10"/> <!-- Reject_Report event -->
+            <column name="positive_points" value="5"/>
+            <column name="negative_points" value="-12"/>
+        </insert>
+
+        <!-- Insert into user_points -->
+        <insert tableName="user_points">
+            <column name="user_id" value="101"/>
+            <column name="event_id" value="1"/> <!-- Create_Post event -->
+            <column name="points" value="12"/>
+        </insert>
+        <insert tableName="user_points">
+            <column name="user_id" value="102"/>
+            <column name="event_id" value="2"/> <!-- Delete_Post event -->
+            <column name="points" value="-12"/>
+        </insert>
+        <insert tableName="user_points">
+            <column name="user_id" value="103"/>
+            <column name="event_id" value="3"/> <!-- Report_Post event -->
+            <column name="points" value="5"/>
+        </insert>
+        <insert tableName="user_points">
+            <column name="user_id" value="104"/>
+            <column name="event_id" value="4"/> <!-- Create_Comment event -->
+            <column name="points" value="7"/>
+        </insert>
+        <insert tableName="user_points">
+            <column name="user_id" value="105"/>
+            <column name="event_id" value="5"/> <!-- Delete_Comment event -->
+            <column name="points" value="-7"/>
+        </insert>
+        <insert tableName="user_points">
+            <column name="user_id" value="106"/>
+            <column name="event_id" value="6"/> <!-- Register_User event -->
+            <column name="points" value="20"/>
+        </insert>
+        <insert tableName="user_points">
+            <column name="user_id" value="107"/>
+            <column name="event_id" value="7"/> <!-- Assign_Admin_Role event -->
+            <column name="points" value="50"/>
+        </insert>
+        <insert tableName="user_points">
+            <column name="user_id" value="108"/>
+            <column name="event_id" value="8"/> <!-- Remove_Admin_Role event -->
+            <column name="points" value="-50"/>
+        </insert>
+        <insert tableName="user_points">
+            <column name="user_id" value="109"/>
+            <column name="event_id" value="9"/> <!-- Approve_Report event -->
+            <column name="points" value="8"/>
+        </insert>
+        <insert tableName="user_points">
+            <column name="user_id" value="110"/>
+            <column name="event_id" value="10"/> <!-- Reject_Report event -->
+            <column name="points" value="5"/>
+        </insert>
+
+        <!-- Additional realistic data -->
+        <insert tableName="user_points">
+            <column name="user_id" value="101"/>
+            <column name="event_id" value="4"/> <!-- Create_Comment event -->
+            <column name="points" value="7"/>
+        </insert>
+        <insert tableName="user_points">
+            <column name="user_id" value="102"/>
+            <column name="event_id" value="5"/> <!-- Delete_Comment event -->
+            <column name="points" value="-7"/>
+        </insert>
+        <insert tableName="user_points">
+            <column name="user_id" value="103"/>
+            <column name="event_id" value="1"/> <!-- Create_Post event -->
+            <column name="points" value="12"/>
+        </insert>
+        <insert tableName="user_points">
+            <column name="user_id" value="104"/>
+            <column name="event_id" value="3"/> <!-- Report_Post event -->
+            <column name="points" value="5"/>
+        </insert>
+        <insert tableName="user_points">
+            <column name="user_id" value="105"/>
+            <column name="event_id" value="9"/> <!-- Approve_Report event -->
+            <column name="points" value="8"/>
+        </insert>
+        <insert tableName="user_points">
+            <column name="user_id" value="106"/>
+            <column name="event_id" value="10"/> <!-- Reject_Report event -->
+            <column name="points" value="5"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

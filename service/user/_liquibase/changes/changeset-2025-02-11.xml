@@ -1,0 +1,70 @@
+<databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+    <changeSet id="1" author="Mahmoud">
+        <!--  Insert first user  -->
+        <insert tableName="user">
+            <column name="first_name" value="John"/>
+            <column name="last_name" value="Doe"/>
+            <column name="email" value="john.doe@example.com"/>
+            <column name="password" value="password123"/>
+            <column name="mobile_number" value="1234567890"/>
+            <column name="gender" value="M"/>
+            <column name="status_id" value="2"/>
+            <column name="created_by_id" value="1"/>
+        </insert>
+        <!--  Insert second user  -->
+        <insert tableName="user">
+            <column name="first_name" value="Jane"/>
+            <column name="last_name" value="Smith"/>
+            <column name="email" value="jane.smith@example.com"/>
+            <column name="password" value="password456"/>
+            <column name="mobile_number" value="0987654321"/>
+            <column name="gender" value="F"/>
+            <column name="status_id" value="2"/>
+            <column name="created_by_id" value="2"/>
+        </insert>
+        <!--  Insert third user  -->
+        <insert tableName="user">
+            <column name="first_name" value="Ahmed"/>
+            <column name="last_name" value="Ali"/>
+            <column name="email" value="ahmed.ali@example.com"/>
+            <column name="password" value="password789"/>
+            <column name="mobile_number" value="1122334455"/>
+            <column name="gender" value="M"/>
+            <column name="status_id" value="2"/>
+            <column name="created_by_id" value="3"/>
+        </insert>
+    </changeSet>
+
+<!--    <changeSet id="2" author="Mahmoud">-->
+<!--        <insert tableName="user_role">-->
+<!--            <column name="user_id" value="1"/>-->
+<!--            <column name="role_id" value="1"/>-->
+<!--            <column name="created_on" value="2025-02-10 10:00:00"/>-->
+<!--        </insert>-->
+<!--        <insert tableName="user_role">-->
+<!--            <column name="user_id" value="2"/>-->
+<!--            <column name="role_id" value="1"/>-->
+<!--            <column name="created_on" value="2025-02-10 10:00:00"/>-->
+<!--        </insert>-->
+<!--        <insert tableName="user_role">-->
+<!--            <column name="user_id" value="3"/>-->
+<!--            <column name="role_id" value="1"/>-->
+<!--            <column name="created_on" value="2025-02-10 10:00:00"/>-->
+<!--        </insert>-->
+<!--    </changeSet>-->
+
+    <changeSet id="3" author="Mahmoud">
+        <update tableName="user_role">
+            <column name="role_id" value="1"/>
+            <where>user_id = 1</where>
+        </update>
+        <update tableName="user_role">
+            <column name="role_id" value="1"/>
+            <where>user_id = 2</where>
+        </update>
+        <update tableName="user_role">
+            <column name="role_id" value="1"/>
+            <where>user_id = 3</where>
+        </update>
+    </changeSet>
+</databaseChangeLog>

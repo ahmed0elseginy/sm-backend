@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+<!--
+    <changeSet id="1" author="mohamed.wagih">
+        <createTable tableName="post_report_status">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="title_en" type="varchar(1000)">
+            </column>
+        </createTable>
+    </changeSet>
+-->
+
+    <changeSet id="2" author="mohamed.wagih">
+        <createTable tableName="post_report_category">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="title_en" type="varchar(1000)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+<!--
+    <changeSet id="3" author="mohamed.wagih">
+<createTable tableName="post_report">
+    <column name="id" type="int" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+    </column>
+    <column name="post_id" type="int">
+        <constraints nullable="false"/>
+    </column>
+    <column name="category_id" type="int">
+            <constraints nullable="false"/>
+    </column>
+
+    <column name="reason" type="varchar(2000)">
+    </column>
+
+    <column name="created_on" type="datetime" defaultValue="NOW()">
+        <constraints nullable="false"/>
+    </column>
+    <column name="created_by_id" type="int">
+        <constraints nullable="false"/>
+    </column>
+    <column name="last_modified_on" type="datetime">
+    </column>
+
+    <column name="status_id" type="int">
+        <constraints nullable="false"/>
+    </column>
+
+    <column name="last_modified_by_id" type="int">
+    </column>
+
+</createTable>
+</changeSet>
+
+
+    <changeSet id="4" author="mohamed.wagih">
+        <addForeignKeyConstraint baseColumnNames="category_id" baseTableName="post_report"
+                                 constraintName="fk_report_post"
+                                 referencedColumnNames="id" referencedTableName="post_report_category"/>
+    </changeSet>
+
+    <changeSet id="5" author="mohamed.wagih">
+        <addForeignKeyConstraint baseColumnNames="status_id" baseTableName="post_report"
+                                 constraintName="fk_status_report"
+                                 referencedColumnNames="id" referencedTableName="post_report_status"/>
+    </changeSet>
+-->
+
+</databaseChangeLog>

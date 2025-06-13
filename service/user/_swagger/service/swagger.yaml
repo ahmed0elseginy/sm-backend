@@ -1,0 +1,348 @@
+openapi: 3.0.3
+
+info:
+  version: "1.0"
+  title: "User Management Service"
+  contact:
+    email: "ahmedmotair@gmail.com"
+    name: "Ahmed Motair"
+
+servers:
+  - url: http://localhost:9104/
+  - url: http://193.43.134.96:9104/
+
+tags:
+  - name: Auth
+  - name: Profile
+  - name: User
+  - name: Role
+
+paths:
+  /auth/register:
+    post:
+      tags:
+        - Auth
+      summary: Register User
+      operationId: registerUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUserDTO'
+        required: true
+      responses:
+        '201':
+          description: Created
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /auth/login:
+    post:
+      tags:
+        - Auth
+      summary: Login
+      operationId: login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginUserDTO'
+        required: true
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginUserVTO'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /profile:
+    get:
+      tags:
+        - Profile
+      summary: Get User Profile Details
+      operationId: getUserProfile
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfileVTO'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+    put:
+      tags:
+        - Profile
+      summary: Update User Profile
+      operationId: updateUserProfile
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserProfileDTO'
+      responses:
+        '204':
+          description: No Content
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /users:
+    get:
+      tags:
+        - User
+      summary: Retrieve All Users With Pagination
+      operationId: getUsersByIds
+      parameters:
+        - name: ids
+          in: query
+          description: Comma-separated list of user IDs to retrieve
+          required: false
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+            example: [1, 2, 3]
+        - name: fullName
+          in: query
+          required: false
+          schema:
+            type: string
+            example: "mohamed wagih"
+        - name: pageNum
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 0
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 10
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResultSet'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /users/{userId}/roles/{roleId}:
+    post:
+      tags:
+        - Role
+      summary: Assign a role to a user
+      operationId: assignRoleToUser
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: The ID of the user to whom the role will be assigned.
+          schema:
+            type: integer
+            format: int64
+        - name: roleId
+          in: path
+          required: true
+          description: The ID of the role to be assigned to the user.
+          schema:
+            type: integer
+      responses:
+        '201':
+          description: Created
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      tags:
+        - Role
+      summary: Remove a role from a user
+      operationId: removeRoleFromUser
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: The ID of the user from whom the role will be removed.
+          schema:
+            type: integer
+            format: int64
+        - name: roleId
+          in: path
+          required: true
+          description: The ID of the role to be removed from the user.
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: No Content
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+
+components:
+  responses:
+    BadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorVTO'
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorVTO'
+
+  schemas:
+    ErrorVTO:
+      type: object
+      properties:
+        domain:
+          type: string
+        code:
+          type: string
+        message:
+          type: string
+        formErrors:
+          type: array
+          items:
+            $ref: '#/components/schemas/FormError'
+
+    FormError:
+      type: object
+      properties:
+        attrName:
+          type: string
+        code:
+          type: string
+
+    LookupVTO:
+      type: object
+      properties:
+        id:
+          type: integer
+        titleEn:
+          type: string
+
+    LightUserVTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        fullName:
+          type: string
+
+    LoginUserVTO:
+      type: object
+      properties:
+        token:
+          type: string
+
+    LoginUserDTO:
+      type: object
+      required:
+        - username
+        - password
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+
+    CreateUserDTO:
+      type: object
+      required:
+        - firstName
+        - lastName
+        - email
+        - password
+        - mobileNumber
+        - gender
+      properties:
+        firstName:
+          type: string
+          maxLength: 25
+          minLength: 2
+        lastName:
+          type: string
+          maxLength: 25
+          minLength: 2
+        mobileNumber:
+          type: string
+        password:
+          type: string
+        email:
+          type: string
+          format: email
+        gender:
+          $ref: '#/components/schemas/Genders'
+
+    Genders:
+      type: string
+      enum: [ "M", "F"]
+
+    UserProfileDTO:
+      type: object
+      required:
+        - firstName
+        - lastName
+        - mobileNumber
+        - gender
+      properties:
+        firstName:
+          type: string
+          maxLength: 25
+          minLength: 2
+        lastName:
+          type: string
+          maxLength: 25
+          minLength: 2
+        mobileNumber:
+          type: string
+        gender:
+          $ref: '#/components/schemas/Genders'
+
+    UserProfileVTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        firstName:
+          type: string
+        lastName:
+          type: string
+        mobileNumber:
+          type: string
+        email:
+          type: string
+        gender:
+          type: string
+
+    UserResultSet:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/LightUserVTO'

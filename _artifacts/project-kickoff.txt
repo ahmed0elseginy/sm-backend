@@ -1,0 +1,45 @@
+
+===> Github Repository
+-----------------------
+	1. Checkout the Source Code
+	    URL: https://github.com/zagsystems2021/sm-backend.git
+
+--------------------------------------------------------------
+===> MySQL Configuration
+------------------------
+	1. Create Username/Password on MySQL
+		Username: social_media
+		Password: social_media@123
+
+	2. Create 4 Databases
+		a. sm_user_mgt
+		b. sm_post_mgt
+		c. sm_point_mgt
+		d. sm_report_mgt
+
+--------------------------------------------------------------
+===> Liquibase Updates
+----------------------
+	1. Update liquibase file located in
+		/service/${service-name}/_liquibase/
+
+	2. Execute the Execute bat file
+		/service/${service-name}/_liquibase/execute.bat
+
+--------------------------------------------------------------
+===> Swagger Updates
+--------------------
+	1. Update swagger file located in
+		/service/${service-name}/_swagger/service/swagger.yaml
+
+	2. Execute the Generate bat file
+		/service/${service-name}/_swagger/service/generate.bat
+
+--------------------------------------------------------------
+===> Start the Application
+---------------------------
+	1. Execute Maven Command
+		mvn clean install on the root pom.xml
+
+	2. Run Each Microservice from its Main Class
+

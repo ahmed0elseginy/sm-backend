@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+    <changeSet id="16" author="ahmed.motair">
+        <dropTable tableName="comment_reaction"/>
+    </changeSet>
+
+    <changeSet id="17" author="ahmed.motair">
+        <createTable tableName="comment_reaction">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="comment_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_on" type="datetime" defaultValue="NOW()">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_by_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="react" type="enum('LIKE','DISLIKE')">
+            </column>
+        </createTable>
+    </changeSet>
+
+    <!-- Add the foreign key constraint for comment_id -->
+    <changeSet id="18" author="ahmed.motair">
+        <addForeignKeyConstraint baseColumnNames="comment_id" baseTableName="comment_reaction"
+                                 constraintName="fk_comment_reaction_comment"
+                                 referencedColumnNames="id" referencedTableName="comment"/>
+    </changeSet>
+
+    <changeSet id="19" author="ahmed/motair">
+        <dropColumn tableName="post" columnName="status"/>
+    </changeSet>
+    <changeSet id="20" author="ahmed.motair">
+        <modifyDataType columnName="last_modified_on" newDataType="datetime" tableName="post"/>
+        <dropDefaultValue tableName="post" columnName="last_modified_on"/>
+    </changeSet>
+</databaseChangeLog>

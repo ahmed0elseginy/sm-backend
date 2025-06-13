@@ -1,0 +1,463 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+
+    <changeSet id="1" author="shahd.abdelnaby">
+        <createTable tableName="workflow">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="title_en" type="varchar(50)">
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="2" author="shahd.abdelnaby">
+        <insert tableName="workflow">
+            <column name="title_en" value="Post Report"/>
+        </insert>
+        <insert tableName="workflow">
+            <column name="title_en" value="Comment Report"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="3" author="shahd.abdelnaby">
+        <createTable tableName="wf_status">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="title_en" type="varchar(50)">
+            </column>
+            <column name="workflow_id" type="int">
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="4" author="shahd.abdelnaby">
+        <addForeignKeyConstraint baseTableName="wf_status"
+                                 baseColumnNames="workflow_id"
+                                 constraintName="fk_status_workflow_id"
+                                 referencedTableName="workflow"
+                                 referencedColumnNames="id"
+        />
+    </changeSet>
+
+    <changeSet id="5" author="shahd.abdelnaby">
+        <insert tableName="wf_status">
+            <column name="title_en" value="Pending"/>
+            <column name="workflow_id" valueComputed="(SELECT id FROM workflow WHERE title_en='Post Report')"/>
+        </insert>
+        <insert tableName="wf_status">
+            <column name="title_en" value="Approved"/>
+            <column name="workflow_id" valueComputed="(SELECT id FROM workflow WHERE title_en='Post Report')"/>
+        </insert>
+        <insert tableName="wf_status">
+            <column name="title_en" value="Cascaded Approval"/>
+            <column name="workflow_id" valueComputed="(SELECT id FROM workflow WHERE title_en='Post Report')"/>
+        </insert>
+        <insert tableName="wf_status">
+            <column name="title_en" value="Semi Approved"/>
+            <column name="workflow_id" valueComputed="(SELECT id FROM workflow WHERE title_en='Post Report')"/>
+        </insert>
+        <insert tableName="wf_status">
+            <column name="title_en" value="Rejected"/>
+            <column name="workflow_id" valueComputed="(SELECT id FROM workflow WHERE title_en='Post Report')"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="6" author="shahd.abdelnaby">
+        <createTable tableName="wf_action">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="title_en" type="varchar(50)">
+            </column>
+            <column name="workflow_id" type="int">
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="7" author="shahd.abdelnaby">
+        <addForeignKeyConstraint baseTableName="wf_action"
+                                 baseColumnNames="workflow_id"
+                                 constraintName="fk_action_workflow_id"
+                                 referencedTableName="workflow"
+                                 referencedColumnNames="id"
+        />
+    </changeSet>
+
+    <changeSet id="8" author="shahd.abdelnaby">
+        <insert tableName="wf_action">
+            <column name="title_en" value="Create"/>
+            <column name="workflow_id" valueComputed="(SELECT id FROM workflow WHERE title_en='Post Report')"/>
+        </insert>
+        <insert tableName="wf_action">
+            <column name="title_en" value="Approve"/>
+            <column name="workflow_id" valueComputed="(SELECT id FROM workflow WHERE title_en='Post Report')"/>
+        </insert>
+        <insert tableName="wf_action">
+            <column name="title_en" value="Reject"/>
+            <column name="workflow_id" valueComputed="(SELECT id FROM workflow WHERE title_en='Post Report')"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="9" author="shahd.abdelnaby">
+        <createTable tableName="wf_transition">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="from_status_id" type="int"/>
+            <column name="to_status_id" type="int"/>
+            <column name="workflow_id" type="int"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="10" author="shahd.abdelnaby">
+        <addForeignKeyConstraint baseTableName="wf_transition"
+                                 baseColumnNames="from_status_id"
+                                 constraintName="fk_transition_from_status"
+                                 referencedTableName="wf_status"
+                                 referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint baseTableName="wf_transition"
+                                 baseColumnNames="to_status_id"
+                                 constraintName="fk_transition_to_status"
+                                 referencedTableName="wf_status"
+                                 referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint baseTableName="wf_transition"
+                                 baseColumnNames="workflow_id"
+                                 constraintName="fk_transition_workflow_id"
+                                 referencedTableName="workflow"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="11" author="shahd.abdelnaby">
+        <createTable tableName="wf_transition_action">
+            <column name="transition_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="action_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="wf_transition_action"
+                                 baseColumnNames="transition_id"
+                                 constraintName="fk_transition_action_transition"
+                                 referencedTableName="wf_transition"
+                                 referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint baseTableName="wf_transition_action"
+                                 baseColumnNames="action_id"
+                                 constraintName="fk_transition_action_action"
+                                 referencedTableName="wf_action"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="12" author="shahd.abdelnaby">
+        <insert tableName="wf_transition">
+            <column name="from_status_id" value="NULL"/>
+            <column name="to_status_id" valueComputed="(SELECT id FROM wf_status WHERE title_en='Pending')"/>
+            <column name="workflow_id" valueComputed="(SELECT id FROM workflow WHERE title_en='Post Report')"/>
+        </insert>
+
+        <insert tableName="wf_transition">
+            <column name="from_status_id" valueComputed="(SELECT id FROM wf_status WHERE title_en='Pending')"/>
+            <column name="to_status_id" valueComputed="(SELECT id FROM wf_status WHERE title_en='Approved')"/>
+            <column name="workflow_id" valueComputed="(SELECT id FROM workflow WHERE title_en='Post Report')"/>
+        </insert>
+
+        <insert tableName="wf_transition">
+            <column name="from_status_id" valueComputed="(SELECT id FROM wf_status WHERE title_en='Pending')"/>
+            <column name="to_status_id" valueComputed="(SELECT id FROM wf_status WHERE title_en='Semi Approved')"/>
+            <column name="workflow_id" valueComputed="(SELECT id FROM workflow WHERE title_en='Post Report')"/>
+        </insert>
+
+        <insert tableName="wf_transition">
+            <column name="from_status_id" valueComputed="(SELECT id FROM wf_status WHERE title_en='Pending')"/>
+            <column name="to_status_id" valueComputed="(SELECT id FROM wf_status WHERE title_en='Cascaded Approval')"/>
+            <column name="workflow_id" valueComputed="(SELECT id FROM workflow WHERE title_en='Post Report')"/>
+        </insert>
+
+        <insert tableName="wf_transition">
+            <column name="from_status_id" valueComputed="(SELECT id FROM wf_status WHERE title_en='Pending')"/>
+            <column name="to_status_id" valueComputed="(SELECT id FROM wf_status WHERE title_en='Rejected')"/>
+            <column name="workflow_id" valueComputed="(SELECT id FROM workflow WHERE title_en='Post Report')"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="13" author="shahd.abdelnaby">
+        <insert tableName="wf_transition_action">
+            <column name="transition_id" valueComputed="(SELECT id FROM wf_transition WHERE from_status_id IS NULL AND to_status_id = (SELECT id FROM wf_status WHERE title_en='Pending'))"/>
+            <column name="action_id" valueComputed="(SELECT id FROM wf_action WHERE title_en='Create')"/>
+        </insert>
+
+        <insert tableName="wf_transition_action">
+            <column name="transition_id" valueComputed="(SELECT id FROM wf_transition WHERE from_status_id = (SELECT id FROM wf_status WHERE title_en='Pending') AND to_status_id = (SELECT id FROM wf_status WHERE title_en='Approved'))"/>
+            <column name="action_id" valueComputed="(SELECT id FROM wf_action WHERE title_en='Approve')"/>
+        </insert>
+
+        <insert tableName="wf_transition_action">
+            <column name="transition_id" valueComputed="(SELECT id FROM wf_transition WHERE from_status_id = (SELECT id FROM wf_status WHERE title_en='Pending') AND to_status_id = (SELECT id FROM wf_status WHERE title_en='Semi Approved'))"/>
+            <column name="action_id" valueComputed="(SELECT id FROM wf_action WHERE title_en='Approve')"/>
+        </insert>
+
+        <insert tableName="wf_transition_action">
+            <column name="transition_id" valueComputed="(SELECT id FROM wf_transition WHERE from_status_id = (SELECT id FROM wf_status WHERE title_en='Pending') AND to_status_id = (SELECT id FROM wf_status WHERE title_en='Rejected'))"/>
+            <column name="action_id" valueComputed="(SELECT id FROM wf_action WHERE title_en='Reject')"/>
+        </insert>
+    </changeSet>
+
+
+    <changeSet id="14" author="shahd.abdelnaby">
+        <createTable tableName="wf_condition">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="title_en" type="varchar(50)"/>
+            <column name="class_name" type="varchar(100)"/>
+            <column name="method_name" type="varchar(100)"/>
+            <column name="workflow_id" type="int"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="15" author="shahd.abdelnaby">
+        <addForeignKeyConstraint baseTableName="wf_condition"
+                                 baseColumnNames="workflow_id"
+                                 constraintName="fk_condition_workflow_id"
+                                 referencedTableName="workflow"
+                                 referencedColumnNames="id"
+        />
+    </changeSet>
+
+    <changeSet id="16" author="shahd.abdelnaby">
+        <insert tableName="wf_condition">
+            <column name="title_en" value="Approve Condition"/>
+            <column name="class_name" value="ReportConditionService"/>
+            <column name="method_name" value="checkReportForApprove"/>
+            <column name="workflow_id" valueComputed="(SELECT id FROM workflow WHERE title_en='Post Report')"/>
+        </insert>
+
+        <insert tableName="wf_condition">
+            <column name="title_en" value="Reject Condition"/>
+            <column name="class_name" value="ReportConditionService"/>
+            <column name="method_name" value="checkReportForReject"/>
+            <column name="workflow_id" valueComputed="(SELECT id FROM workflow WHERE title_en='Post Report')"/>
+        </insert>
+
+    </changeSet>
+
+
+    <changeSet id="17" author="shahd.abdelnaby">
+        <createTable tableName="wf_transition_condition">
+            <column name="transition_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="condition_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="result" type="varchar(100)"/>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="wf_transition_condition"
+                                 baseColumnNames="transition_id"
+                                 constraintName="fk_transition_condition_transition"
+                                 referencedTableName="wf_transition"
+                                 referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint baseTableName="wf_transition_condition"
+                                 baseColumnNames="condition_id"
+                                 constraintName="fk_transition_condition_condition"
+                                 referencedTableName="wf_condition"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="18" author="shahd.abdelnaby">
+        <insert tableName="wf_transition_condition">
+            <column name="transition_id" valueComputed="(SELECT id FROM wf_transition WHERE from_status_id = (SELECT id FROM wf_status WHERE title_en='Pending') AND to_status_id = (SELECT id FROM wf_status WHERE title_en='Approved'))"/>
+            <column name="condition_id" valueComputed="(SELECT id FROM wf_condition WHERE title_en='Approve Condition')"/>
+        </insert>
+
+        <insert tableName="wf_transition_condition">
+            <column name="transition_id" valueComputed="(SELECT id FROM wf_transition WHERE from_status_id = (SELECT id FROM wf_status WHERE title_en='Pending') AND to_status_id = (SELECT id FROM wf_status WHERE title_en='Approved'))"/>
+            <column name="condition_id" valueComputed="(SELECT id FROM wf_condition WHERE title_en='Approve Condition')"/>
+        </insert>
+
+        <insert tableName="wf_transition_condition">
+            <column name="transition_id" valueComputed="(SELECT id FROM wf_transition WHERE from_status_id = (SELECT id FROM wf_status WHERE title_en='Pending') AND to_status_id = (SELECT id FROM wf_status WHERE title_en='Semi Approved'))"/>
+            <column name="condition_id" valueComputed="(SELECT id FROM wf_condition WHERE title_en='Approve Condition')"/>
+        </insert>
+
+        <insert tableName="wf_transition_condition">
+            <column name="transition_id" valueComputed="(SELECT id FROM wf_transition WHERE from_status_id = (SELECT id FROM wf_status WHERE title_en='Pending') AND to_status_id = (SELECT id FROM wf_status WHERE title_en='Rejected'))"/>
+            <column name="condition_id" valueComputed="(SELECT id FROM wf_condition WHERE title_en='Reject Condition')"/>
+        </insert>
+
+        <insert tableName="wf_transition_condition">
+            <column name="transition_id" valueComputed="(SELECT id FROM wf_transition WHERE from_status_id = (SELECT id FROM wf_status WHERE title_en='Pending') AND to_status_id = (SELECT id FROM wf_status WHERE title_en='Rejected'))"/>
+            <column name="condition_id" valueComputed="(SELECT id FROM wf_condition WHERE title_en='Reject Condition')"/>
+        </insert>
+
+    </changeSet>
+
+
+    <changeSet id="19" author="shahd.abdelnaby">
+        <createTable tableName="wf_activity">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="title_en" type="varchar(50)"/>
+            <column name="class_name" type="varchar(100)"/>
+            <column name="method_name" type="varchar(100)"/>
+            <column name="workflow_id" type="int"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="20" author="shahd.abdelnaby">
+        <addForeignKeyConstraint baseTableName="wf_activity"
+                                 baseColumnNames="workflow_id"
+                                 constraintName="fk_activity_workflow_id"
+                                 referencedTableName="workflow"
+                                 referencedColumnNames="id"
+        />
+    </changeSet>
+
+    <changeSet id="21" author="shahd.abdelnaby">
+        <insert tableName="wf_activity">
+            <column name="title_en" value="Create Post Report"/>
+            <column name="class_name" value="ReportServiceImpl"/>
+            <column name="method_name" value="createPostReport"/>
+            <column name="workflow_id" valueComputed="(SELECT id FROM workflow WHERE title_en='Post Report')"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="22" author="shahd.abdelnaby">
+        <createTable tableName="wf_transition_activity">
+            <column name="transition_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="activity_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="wf_transition_activity"
+                                 baseColumnNames="transition_id"
+                                 constraintName="fk_transition_activity_transition"
+                                 referencedTableName="wf_transition"
+                                 referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint baseTableName="wf_transition_activity"
+                                 baseColumnNames="activity_id"
+                                 constraintName="fk_transition_activity_activity"
+                                 referencedTableName="wf_activity"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="23" author="shahd.abdelnaby">
+        <insert tableName="wf_transition_activity">
+            <column name="transition_id" valueComputed="(SELECT id FROM wf_transition WHERE from_status_id IS NULL AND to_status_id = (SELECT id FROM wf_status WHERE title_en='Pending'))"/>
+            <column name="activity_id" valueComputed="(SELECT id FROM wf_activity WHERE title_en='Create Post Report')"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="24" author="shahd.abdelnaby">
+        <createTable tableName="wf_request">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="title_en" type="varchar(50)"/>
+            <column name="current_status_id" type="int"/>
+            <column name="created_by" type="int"/>
+            <column name="created_on" type="datetime" defaultValue="NOW()"/>
+            <column name="last_modified_on" type="datetime"/>
+            <column name="last_modified_by" type="int"/>
+            <column name="workflow_id" type="int"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="25" author="shahd.abdelnaby">
+        <addForeignKeyConstraint baseTableName="wf_request"
+                                 baseColumnNames="current_status_id"
+                                 constraintName="fk_request_status_id"
+                                 referencedTableName="wf_status"
+                                 referencedColumnNames="id"
+        />
+
+        <addForeignKeyConstraint baseTableName="wf_request"
+                                 baseColumnNames="workflow_id"
+                                 constraintName="fk_request_workflow_id"
+                                 referencedTableName="workflow"
+                                 referencedColumnNames="id"
+        />
+    </changeSet>
+
+<!--    <changeSet id="26" author="shahd.abdelnaby">-->
+<!--        <insert tableName="wf_request">-->
+<!--            <column name="title_en" value="Create Report"/>-->
+<!--            <column name="current_status_id" value="NULL"/>-->
+<!--            <column name="workflow_id" valueComputed="(SELECT id FROM workflow WHERE title_en='Post Report')"/>-->
+<!--            <column name="created_by" value="1"/>-->
+<!--        </insert>-->
+
+<!--        <insert tableName="wf_request">-->
+<!--            <column name="title_en" value="Approve Report"/>-->
+<!--            <column name="current_status_id" valueComputed="(SELECT id FROM wf_status WHERE title_en='Pending')"/>-->
+<!--            <column name="workflow_id" valueComputed="(SELECT id FROM workflow WHERE title_en='Post Report')"/>-->
+<!--            <column name="created_by" value="2"/>-->
+<!--        </insert>-->
+
+<!--        <insert tableName="wf_request">-->
+<!--            <column name="title_en" value="Reject Report"/>-->
+<!--            <column name="current_status_id" valueComputed="(SELECT id FROM wf_status WHERE title_en='Pending')"/>-->
+<!--            <column name="workflow_id" valueComputed="(SELECT id FROM workflow WHERE title_en='Post Report')"/>-->
+<!--            <column name="created_by" value="1"/>-->
+<!--        </insert>-->
+<!--    </changeSet>-->
+
+    <changeSet id="27" author="shahd.abdelnaby">
+        <createTable tableName="post_report_details">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="post_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="category_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="reason" type="varchar(500)">
+            </column>
+            <column name="reject_reason" type="varchar(500)">
+            </column>
+            <column name="wf_request_id" type="int">
+            </column>
+
+        </createTable>
+    </changeSet>
+
+    <changeSet id="28" author="shahd.abdelnaby">
+        <addForeignKeyConstraint baseTableName="post_report_details"
+                                 baseColumnNames="category_id"
+                                 constraintName="fk_report_details_category_id"
+                                 referencedTableName="post_report_category"
+                                 referencedColumnNames="id"
+        />
+
+        <addForeignKeyConstraint baseTableName="post_report_details"
+                                 baseColumnNames="wf_request_id"
+                                 constraintName="fk_report_details_wf_request_id"
+                                 referencedTableName="wf_request"
+                                 referencedColumnNames="id"
+        />
+    </changeSet>
+
+
+
+
+</databaseChangeLog>

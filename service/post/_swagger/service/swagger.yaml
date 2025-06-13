@@ -1,0 +1,593 @@
+openapi: 3.0.3
+
+info:
+  version: "1.0"
+  title: "Post Management Service"
+  contact:
+    email: "ahmedmotair@gmail.com"
+    name: "Ahmed Motair"
+
+servers:
+  - url: http://localhost:9102/
+  - url: http://193.43.134.96:9102/
+
+tags:
+  - name: Post
+  - name: Comment
+  - name: Post Rate
+
+paths:
+  /posts:
+    post:
+      tags:
+        - Post
+      summary: Create a new post
+      operationId: createPost
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostDTO'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: integer
+                format: int64
+                description: Post Id
+                example: 123
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    get:
+      tags:
+        - Post
+      summary: Retrieve All Posts With Filters, Sorting & Pagination
+      operationId: getAllPostsByFilters
+      parameters:
+        - name: title
+          in: query
+          description: Post Title
+          required: false
+          schema:
+            type: string
+            example: "Mentorship"
+        - name: createdById
+          in: query
+          description: Post Owner
+          required: false
+          schema:
+            type: integer
+            format: int64
+            example: "250"
+        - name: createdOnFrom
+          in: query
+          description: Post Creation Date From
+          required: false
+          schema:
+            type: string
+            format: date
+            example: "2025-01-28"
+        - name: createdOnTo
+          in: query
+          description: Post Creation Date To
+          required: false
+          schema:
+            type: string
+            format: date
+            example: "2025-01-28"
+        - name: orderBy
+          in: query
+          description: Order Attribute
+          required: false
+          schema:
+            $ref: '#/components/schemas/GetAllPostsOrderByAttributes'
+
+        - name: orderDir
+          in: query
+          description: Order Direction
+          required: false
+          schema:
+            $ref: '#/components/schemas/OrderDirections'
+
+        - name: pageOffset
+          in: query
+          description: Pagination Page Offset
+          required: false
+          schema:
+            type: integer
+            default: 0
+        - name: pageSize
+          in: query
+          description: Pagination Page Size
+          required: false
+          schema:
+            type: integer
+            default: 10
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostResultSet'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /posts/{id}:
+    delete:
+      tags:
+        - Post
+      summary: Delete a post by ID
+      operationId: deletePost
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the post to delete
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: No Content
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    get:
+      tags:
+        - Post
+      summary: Retrieve a post by ID
+      operationId: getPostById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostVTO'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /posts/{id}/getSpecific:
+    get:
+      tags:
+        - Post
+      summary: Retrieve a post by IDو Even if the post is deleted
+      operationId: getSpecificPost
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostVTO'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /posts/{postId}/comments:
+    post:
+      tags:
+        - Comment
+      summary: Create Comment
+      operationId: createComment
+      parameters:
+        - name: postId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 123
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CommentDTO'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: integer
+                format: int64
+                description: Comment Id
+                example: 250
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    get:
+      tags:
+        - Comment
+      summary: Retrieve All Comments With Pagination
+      operationId: getAllComments
+      parameters:
+        - name: postId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 1
+        - name: pageOffset
+          in: query
+          description: Pagination Page Offset
+          required: false
+          schema:
+            type: integer
+            default: 0
+        - name: pageSize
+          in: query
+          description: Pagination Page Size
+          required: false
+          schema:
+            type: integer
+            default: 10
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommentResultSet'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /posts/{postId}/comments/{commentId}:
+    delete:
+      tags:
+        - Comment
+      summary: Delete Comment
+      operationId: deleteComment
+      parameters:
+        - name: postId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 123
+        - name: commentId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 250
+      responses:
+        '204':
+          description: No Content
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /posts/{postId}/comments/{commentId}/{reaction}:
+    post:
+      tags:
+        - Comment
+      summary: React to a Comment
+      operationId: reactComment
+      parameters:
+        - name: postId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 250
+        - name: commentId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 250
+        - name: reaction
+          in: path
+          required: true
+          description: Comment Reaction
+          schema:
+            $ref: '#/components/schemas/CommentReactions'
+      responses:
+        '204':
+          description: No Content
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /posts/{postId}/comments/count:
+    get:
+      tags:
+        - Comment
+      summary: Get all Comments Count of a post
+      operationId: getAllCommentsCount
+      parameters:
+        - name: postId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 123
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: integer
+                format: int64
+                description: Total Number of Comments on Post
+                example: 650
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /posts/{postId}/rate:
+    put:
+      tags:
+        - Post Rate
+      summary: Rate Post
+      operationId: ratePost
+      parameters:
+        - name: postId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 123
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostRateDTO'
+      responses:
+        '204':
+          description: No Content
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /posts/{postId}/rates/average:
+    get:
+      tags:
+        - Post Rate
+      summary: Get Post Average Rating
+      operationId: getPostAverageRating
+      parameters:
+        - name: postId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 123
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: number
+                format: float
+                description: Average Post Rating
+                example: 4.7
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+components:
+  responses:
+    BadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorVTO'
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorVTO'
+
+  schemas:
+    ErrorVTO:
+      type: object
+      properties:
+        domain:
+          type: string
+        code:
+          type: string
+        message:
+          type: string
+        formErrors:
+          type: array
+          items:
+            $ref: '#/components/schemas/FormError'
+
+    FormError:
+      type: object
+      properties:
+        attrName:
+          type: string
+        code:
+          type: string
+
+    LookupVTO:
+      type: object
+      properties:
+        id:
+          type: integer
+        titleEn:
+          type: string
+
+    LightUserVTO:
+      type: object
+      properties:
+        id:
+          type: integer
+        fullName:
+          type: string
+
+    PostDTO:
+      type: object
+      required:
+        - title
+        - content
+      properties:
+        title:
+          type: string
+          maxLength: 1000
+          minLength: 25
+          example: Test
+        content:
+          type: string
+
+    PostResultSet:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PostListItem'
+        total:
+          type: integer
+          format: int64
+          description: Total Number Of Posts
+
+    PostListItem:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        title:
+          type: string
+        content:
+          type: string
+        createdBy:
+          $ref: '#/components/schemas/LightUserVTO'
+        createdOn:
+          type: string
+          format: date
+          example: "2025-01-27 15:43:25"
+
+    PostVTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        title:
+          type: string
+        content:
+          type: string
+        createdBy:
+          $ref: '#/components/schemas/LightUserVTO'
+        createdOn:
+          type: string
+          format: date
+          example: "2025-01-27 15:43:25"
+
+
+    CommentDTO:
+      type: object
+      required:
+        - content
+      properties:
+        content:
+          type: string
+
+    CommentResultSet:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommentListItem'
+
+
+    CommentListItem:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        content:
+          type: string
+        createdBy:
+          $ref: '#/components/schemas/LightUserVTO'
+        createdOn:
+          type: string
+          format: date
+          example: "2025-01-27 15:43:25"
+        currentUserReaction:
+          $ref: '#/components/schemas/CommentReactions'
+        numOfLikes:
+          type: integer
+          format: int64
+        numOfDisLikes:
+          type: integer
+          format: int64
+
+    PostRateDTO:
+      type: object
+      required:
+        - content
+      properties:
+        value:
+          $ref: '#/components/schemas/PostRates'
+
+    PostRates:
+      type: integer
+      minimum: 1
+      maximum: 5
+
+    CommentReactions:
+      type: string
+      enum: [ LIKE, DIS_LIKE ]
+      example: LIKE
+
+    GetAllPostsOrderByAttributes:
+      type: string
+      enum: [ TITLE, POST_OWNER, CREATION_DATE ]
+      example: "TITLE"
+    OrderDirections:
+      type: string
+      enum: [ ASC, DESC ]
+      default: "DESC"
+      example: "ASC"
+

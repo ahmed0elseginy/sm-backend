@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+
+    <changeSet id="21" author="mahmoud" >
+        <modifyDataType tableName="post_rate" columnName="rate" newDataType="int"/>
+    </changeSet>
+
+    <changeSet id="22" author="mahmoud" >
+        <addColumn tableName="post_rate">
+            <column name="last_modified_on" type="datetime" defaultValue="NOW()">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+
+</databaseChangeLog>

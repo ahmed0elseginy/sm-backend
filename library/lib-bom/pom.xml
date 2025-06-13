@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>zag</groupId>
+        <artifactId>social-media</artifactId>
+        <version>0.0.1</version>
+        <relativePath>../../pom.xml</relativePath>
+    </parent>
+
+    <groupId>zag.library</groupId>
+    <artifactId>lib-bom</artifactId>
+    <version>0.0.1</version>
+    <packaging>pom</packaging>
+
+    <properties>
+        <zag.logger-adapter.version>0.0.1</zag.logger-adapter.version>
+        <zag.common.version>0.0.1</zag.common.version>
+        <zag.session-manager.version>0.0.1</zag.session-manager.version>
+        <zag.rest-adapter.version>0.0.1</zag.rest-adapter.version>
+        <zag.security-adapter.version>0.0.1</zag.security-adapter.version>
+        <zag.mq-adapter.version>0.0.1</zag.mq-adapter.version>
+        <!--        <zag.cache-adapter.version>0.0.1</zag.cache-adapter.version>-->
+        <!--        <zag.email-adapter.version>0.0.1</zag.email-adapter.version>-->
+        <!--        <zag.sms-adapter.version>0.0.1</zag.sms-adapter.version>-->
+        <zag.sql-db-adapter.version>0.0.1</zag.sql-db-adapter.version>
+        <zag.swagger.version>0.0.1</zag.swagger.version>
+        <!--        <zag.scheduler.version>0.0.1</zag.scheduler.version>-->
+        <zag.unit-test.version>0.0.1</zag.unit-test.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>zag.library</groupId>
+                <artifactId>logger-adapter</artifactId>
+                <version>${zag.logger-adapter.version}</version>
+            </dependency>
+
+            <!--            <dependency>-->
+            <!--                <groupId>zag.library</groupId>-->
+            <!--                <artifactId>email-adapter</artifactId>-->
+            <!--                <version>${zag.email-adapter.version}</version>-->
+            <!--            </dependency>-->
+
+            <!--            <dependency>-->
+            <!--                <groupId>zag.library</groupId>-->
+            <!--                <artifactId>sms-adapter</artifactId>-->
+            <!--                <version>${zag.sms-adapter.version}</version>-->
+            <!--            </dependency>-->
+
+            <dependency>
+                <groupId>zag.library</groupId>
+                <artifactId>common</artifactId>
+                <version>${zag.common.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>zag.library</groupId>
+                <artifactId>session-manager</artifactId>
+                <version>${zag.session-manager.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>zag.library</groupId>
+                <artifactId>rest-adapter</artifactId>
+                <version>${zag.rest-adapter.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>zag.library</groupId>
+                <artifactId>security-adapter</artifactId>
+                <version>${zag.security-adapter.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>zag.library</groupId>
+                <artifactId>mq-adapter</artifactId>
+                <version>${zag.mq-adapter.version}</version>
+            </dependency>
+
+            <!--            <dependency>-->
+            <!--                <groupId>zag.library</groupId>-->
+            <!--                <artifactId>cache-adapter</artifactId>-->
+            <!--                <version>${zag.cache-adapter.version}</version>-->
+            <!--            </dependency>-->
+
+            <dependency>
+                <groupId>zag.library</groupId>
+                <artifactId>sql-db-adapter</artifactId>
+                <version>${zag.sql-db-adapter.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>zag.library</groupId>
+                <artifactId>swagger</artifactId>
+                <version>${zag.swagger.version}</version>
+            </dependency>
+
+            <!--            <dependency>-->
+            <!--                <groupId>zag.library</groupId>-->
+            <!--                <artifactId>scheduler</artifactId>-->
+            <!--                <version>${zag.scheduler.version}</version>-->
+            <!--            </dependency>-->
+
+            <dependency>
+                <groupId>zag.library</groupId>
+                <artifactId>unit-test</artifactId>
+                <version>${zag.unit-test.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+</project>

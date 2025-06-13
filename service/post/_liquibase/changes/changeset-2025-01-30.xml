@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+    <changeSet id="10" author="ahmed.motair">
+        <modifyDataType tableName="post" columnName="title" newDataType="varchar(1000)"/>
+    </changeSet>
+
+
+    <changeSet id="11" author="ahmed.motair">
+        <modifyDataType tableName="post" columnName="content" newDataType="text"/>
+    </changeSet>
+
+    <changeSet id="12" author="ahmed.motair">
+       <addColumn tableName="post">
+           <column name="is_deleted"
+               type="boolean"
+               defaultValueBoolean="false">
+               <constraints
+                   nullable="false"/>
+           </column>
+
+       </addColumn>
+
+    </changeSet>
+
+    <changeSet id="13" author="ahmed.motair">
+            <renameTable oldTableName="rate"
+                         newTableName="post_rate"/>
+    </changeSet>
+
+
+    <changeSet id="14" author="ahmed.motair">
+    <renameColumn tableName="post_rate" oldColumnName="post_rate" newColumnName="rate" columnDataType="enum('1','2','3','4','5')"/>
+
+    </changeSet>
+
+    <changeSet id="15" author="ahmed.motair">
+        <modifyDataType tableName="comment_reaction" columnName="react" newDataType="enum('LIKE','DIS_LIKE')"/>
+    </changeSet>
+
+</databaseChangeLog>

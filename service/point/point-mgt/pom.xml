@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>zag</groupId>
+        <artifactId>social-media</artifactId>
+        <version>0.0.1</version>
+        <relativePath>../../../pom.xml</relativePath>
+    </parent>
+
+    <groupId>zag.social-media.point</groupId>
+    <artifactId>point-mgt</artifactId>
+    <version>0.0.1</version>
+
+    <properties>
+        <service-name.dot-separated>point</service-name.dot-separated>
+        <service-name.dash-separated>point</service-name.dash-separated>
+        <service-name.slash-separated>point</service-name.slash-separated>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>zag.library</groupId>
+            <artifactId>common</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>zag.library</groupId>
+            <artifactId>logger-adapter</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>zag.library</groupId>
+            <artifactId>session-manager</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>zag.library</groupId>
+            <artifactId>swagger</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>zag.library</groupId>
+            <artifactId>rest-adapter</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>zag.library</groupId>
+            <artifactId>security-adapter</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-artemis</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>zag.social-media.point</groupId>
+            <artifactId>point-model</artifactId>
+            <version>0.0.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>zag.library</groupId>
+            <artifactId>sql-db-adapter</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>zag.library</groupId>
+            <artifactId>unit-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!--        <dependency>-->
+        <!--            <groupId>org.springframework.boot</groupId>-->
+        <!--            <artifactId>spring-boot-starter-mail</artifactId>-->
+        <!--        </dependency>-->
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-artemis</artifactId>
+        </dependency>
+
+
+        <dependency>
+            <groupId>zag.social-media.report</groupId>
+            <artifactId>report-model</artifactId>
+            <version>0.0.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>zag.social-media.post</groupId>
+            <artifactId>post-model</artifactId>
+            <version>0.0.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>zag.social-media.user</groupId>
+            <artifactId>user-model</artifactId>
+            <version>0.0.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>zag.social-media.user</groupId>
+            <artifactId>user-model</artifactId>
+            <version>0.0.1</version>
+        </dependency>
+
+
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>zag.library</groupId>
+                <artifactId>lib-bom</artifactId>
+                <version>${zag.lib-bom.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+</project>
