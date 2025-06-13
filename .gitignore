@@ -55,7 +55,6 @@ Thumbs.db
 *.app
 *.exe
 *.war
-*.jar
 
 # Large media files
 *.mp4
