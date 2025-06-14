@@ -1,2 +1,2 @@
-web: java -jar service\user\user-mgt\target\user-mgt-0.0.1.jar
+web: java -jar service\user\user-model\target\user-model-0.0.1.jar
 
