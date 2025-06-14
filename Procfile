@@ -1,1 +1,3 @@
-web: java -jar service/post/post-mgt/target/post-mgt-0.0.1.jar
+web: java -jar service/post/deployments/post_ver_0.0.1/post-mgt.jar
+
+
