@@ -38,7 +38,6 @@ release.properties
 
 # Eclipse IDE
 .settings/
-.vscode/
 .project
 .classpath
 
@@ -67,3 +66,4 @@ Thumbs.db
 
 # Git
 *.my-cred
+config.bat
