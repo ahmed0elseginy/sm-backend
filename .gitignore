@@ -66,3 +66,5 @@ Thumbs.db
 
 # Git
 *.my-cred
+!.env.example
+config.bat
